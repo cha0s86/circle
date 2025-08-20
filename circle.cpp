@@ -89,14 +89,14 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
 	
 	coordsobj = createslice(coordsobj, cx, cy, radius, maxslices);
 
 	/* Check the logic for this for loop later, write it down and examine it*/
 	// Draw the polygon
-	SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);  // Blue color for lines
+	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);  // Blue color for lines
 	
 	// Draw lines connecting consecutive points to form the octagon
 	for (size_t i = 0; i < coordsobj.x.size(); i++) {
