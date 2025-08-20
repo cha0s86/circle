@@ -12,7 +12,7 @@ struct coords {
 		std::vector<float> y;
 };
 
-coords createslice(coords coordsobj, float cx, float cy, int slices, float radius, int maxslices) {
+coords createslice(coords coordsobj, float cx, float cy, float radius, int maxslices) {
 
 	// Clear any existing coordinates
 	coordsobj.x.clear();
@@ -44,18 +44,27 @@ coords createslice(coords coordsobj, float cx, float cy, int slices, float radiu
 int main(int argc, char* argv[]) {
 
 	// Initialize variables
-	float cx = 640;  // Center x coordinate (half of window width)
-	float cy = 360;  // Center y coordinate (half of window height)
+	int SCREEN_WIDTH = 640;
+	int SCREEN_HEIGHT = 360;
+	
+	// Circle center coordinates
+	float cx = SCREEN_WIDTH/2;  // Center x coordinate (half of window width)
+	float cy = SCREEN_HEIGHT/2;  // Center y coordinate (half of window height)
 
+	// Coordinaeobject
 	coords coordsobj;
 	
+	// Default values
 	int maxslices = 10;
+	float radius = 100;  // Increased radius for better visibility
 
+	// Commandline argument handling
 	if (argc == 2) {
 		maxslices = stoi(argv[1]);
+	} else if (argc == 3) {
+		maxslices = stoi(argv[1]);
+		radius = stoi(argv[2]);
 	}
-
-	float radius = 100;  // Increased radius for better visibility
 
 	std::cout << "Welcome to circle approximator! a fun program!" << std::endl;
 	std::cout << "Initializing SDL2..." << std::endl;
@@ -65,7 +74,7 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 
-	SDL_Window* window = SDL_CreateWindow("My circle approximator!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, 0);
+	SDL_Window* window = SDL_CreateWindow("My circle approximator!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
 	if (!window) {
 		std::cout << "Failed to create window: " << SDL_GetError() << ". Exiting!" << std::endl;
 		SDL_Quit();
@@ -83,7 +92,7 @@ int main(int argc, char* argv[]) {
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	SDL_RenderClear(renderer);
 	
-	coordsobj = createslice(coordsobj, cx, cy, 0, radius, maxslices);
+	coordsobj = createslice(coordsobj, cx, cy, radius, maxslices);
 
 	/* Check the logic for this for loop later, write it down and examine it*/
 	// Draw the polygon
@@ -92,7 +101,6 @@ int main(int argc, char* argv[]) {
 	// Draw lines connecting consecutive points to form the octagon
 	for (size_t i = 0; i < coordsobj.x.size(); i++) {
 		size_t next = (i + 1) % coordsobj.x.size();  // Connect last point to first point
-		std::cout << "Current point: " << i << ", next point: " << next << std::endl;
 		SDL_RenderDrawLine(renderer, 
 			(int)coordsobj.x[i], (int)coordsobj.y[i],
 			(int)coordsobj.x[next], (int)coordsobj.y[next]);
